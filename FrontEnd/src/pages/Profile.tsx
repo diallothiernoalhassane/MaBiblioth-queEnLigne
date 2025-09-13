@@ -9,6 +9,7 @@ interface UserProfile {
   nom: string;
   email: string;
   dateCreation: string;
+  dateInscription?: string;
   role: string;
 }
 

@@ -228,7 +228,7 @@ const About = () => {
                       <motion.a
                         whileHover={{ scale: 1.05, y: -2 }}
                         whileTap={{ scale: 0.95 }}
-                        href="mailto:diallo@gmail.com"
+                        href="mailto:diallothiernoalhassane9588@gmail.com"
                         className="flex items-center justify-center space-x-2 sm:space-x-3 px-4 sm:px-6 py-2 sm:py-3 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-xl hover:from-indigo-700 hover:to-purple-700 transition-all duration-300 shadow-lg hover:shadow-xl text-sm sm:text-base"
                       >
                         <Mail className="w-5 h-5" />
@@ -238,7 +238,9 @@ const About = () => {
                       <motion.a
                         whileHover={{ scale: 1.05, y: -2 }}
                         whileTap={{ scale: 0.95 }}
-                        href="#"
+                        href="https://github.com/diallothiernoalhassane"
+                        target="_blank"
+                        rel="noopener noreferrer"
                         className="flex items-center justify-center space-x-2 sm:space-x-3 px-4 sm:px-6 py-2 sm:py-3 bg-gradient-to-r from-gray-700 to-gray-800 text-white rounded-xl hover:from-gray-800 hover:to-gray-900 transition-all duration-300 shadow-lg hover:shadow-xl text-sm sm:text-base"
                       >
                         <Github className="w-5 h-5" />
@@ -248,7 +250,9 @@ const About = () => {
                       <motion.a
                         whileHover={{ scale: 1.05, y: -2 }}
                         whileTap={{ scale: 0.95 }}
-                        href="#"
+                        href="https://www.linkedin.com/in/thierno-alhassane-diallo-104515349/"
+                        target="_blank"
+                        rel="noopener noreferrer"
                         className="flex items-center justify-center space-x-2 sm:space-x-3 px-4 sm:px-6 py-2 sm:py-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-xl hover:from-blue-700 hover:to-blue-800 transition-all duration-300 shadow-lg hover:shadow-xl text-sm sm:text-base"
                       >
                         <Linkedin className="w-5 h-5" />
@@ -325,4 +329,3 @@ const About = () => {
 };
 
 export default About;
-

@@ -43,6 +43,8 @@ const Catalogue = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [booksPerPage] = useState(20);
+  const [searchQuery] = useState('');
+  const [isSearching, setIsSearching] = useState(false);
 
   useEffect(() => {
     fetchData();
@@ -51,8 +53,17 @@ const Catalogue = () => {
   useEffect(() => {
     // Appliquer le filtre de catégorie depuis l'URL
     const categoryFilter = searchParams.get('categorie');
-    if (categoryFilter) {
-      handleCategoryFilter(categoryFilter);
+    if (books.length > 0) {
+      // Utiliser setTimeout pour éviter les conflits de re-rendu
+      const timeoutId = setTimeout(() => {
+        if (categoryFilter) {
+          applyFilters(searchQuery, categoryFilter);
+        } else {
+          applyFilters(searchQuery, '');
+        }
+      }, 0);
+      
+      return () => clearTimeout(timeoutId);
     }
   }, [searchParams, books]);
 
@@ -83,7 +94,11 @@ const Catalogue = () => {
   };
 
   const handleSearch = (query: string) => {
-    applyFilters(query, searchParams.get('categorie') || '');
+    // Si la recherche est vidée, réinitialiser aussi les filtres de catégorie
+    if (query.trim() === '') {
+      setSearchParams({});
+    }
+    applyFilters(query, query.trim() === '' ? '' : searchParams.get('categorie') || '');
     setCurrentPage(1); // Reset page après filtrage
   };
 
@@ -93,11 +108,11 @@ const Catalogue = () => {
     } else {
       setSearchParams({});
     }
-    applyFilters('', categoryId || '');
     setCurrentPage(1); // Reset page après filtrage
   };
 
   const applyFilters = (search: string, category: string) => {
+    setIsSearching(true);
     let filtered = [...books];
 
     // Filtrage par recherche
@@ -148,6 +163,7 @@ const Catalogue = () => {
 
     setFilteredBooks(filtered);
     setTotalPages(Math.ceil(filtered.length / booksPerPage));
+    setIsSearching(false);
     // Ne pas reset currentPage ici car cela cause un conflit avec useEffect
     window.scrollTo({ top: 0, behavior: 'smooth' }); // Scroll vers le haut
   };
@@ -234,7 +250,7 @@ const Catalogue = () => {
             onCategoryFilter={handleCategoryFilter}
             categories={categories}
             selectedCategory={searchParams.get('categorie')}
-            searchQuery=""
+            searchQuery={searchQuery}
           />
         </div>
       </section>
@@ -245,7 +261,7 @@ const Catalogue = () => {
           <div className="flex flex-col lg:flex-row items-center justify-between space-y-4 lg:space-y-0">
             <div className="flex items-center space-x-4">
               <span className="text-sm sm:text-base text-gray-600">
-                {filteredBooks.length} livre{filteredBooks.length > 1 ? 's' : ''} trouvé{filteredBooks.length > 1 ? 's' : ''}
+                {isSearching ? 'Recherche en cours...' : `${filteredBooks.length} livre${filteredBooks.length > 1 ? 's' : ''} trouvé${filteredBooks.length > 1 ? 's' : ''}`}
               </span>
             </div>
 
@@ -324,7 +340,7 @@ const Catalogue = () => {
                 <button
                   onClick={() => {
                     setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
-                    applyFilters('', searchParams.get('categorie') || '');
+                    applyFilters(searchQuery, searchParams.get('categorie') || '');
                     window.scrollTo({ top: 0, behavior: 'smooth' });
                   }}
                   className="p-2 sm:p-3 border border-gray-300 rounded-md hover:bg-gray-50 transition-colors"
@@ -348,7 +364,7 @@ const Catalogue = () => {
 
             return (
               <>
-                {filteredBooks.length > 0 ? (
+                {currentBooks.length > 0 ? (
             viewMode === 'grid' ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
                 {currentBooks.map((book, index) => (
@@ -422,19 +438,23 @@ const Catalogue = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
-              className="text-center py-16"
+              className="text-center py-16 bg-white rounded-lg shadow-sm"
             >
-              <div className="max-w-md mx-auto">
-                <div className="w-24 h-24 mx-auto mb-6 bg-gradient-to-br from-gray-100 to-gray-200 rounded-full flex items-center justify-center">
-                  <BookOpen className="w-12 h-12 text-gray-400" />
+              <div className="max-w-md mx-auto px-6">
+                <div className="w-24 h-24 mx-auto mb-6 bg-gradient-to-br from-blue-100 to-indigo-100 rounded-full flex items-center justify-center">
+                  <BookOpen className="w-12 h-12 text-blue-500" />
                 </div>
-                <h3 className="text-xl font-semibold text-gray-700 mb-3">
+                <h3 className="text-2xl font-bold text-gray-800 mb-4">
                   Aucun livre trouvé
                 </h3>
-                <p className="text-gray-500 text-base leading-relaxed">
+                <p className="text-gray-600 text-lg leading-relaxed mb-6">
                   Aucun livre ne correspond à vos critères de recherche. 
-                  Essayez de modifier vos filtres ou votre recherche.
                 </p>
+                <div className="space-y-2 text-sm text-gray-500">
+                  <p>• Vérifiez l'orthographe de votre recherche</p>
+                  <p>• Essayez des mots-clés différents</p>
+                  <p>• Modifiez vos filtres de catégorie</p>
+                </div>
               </div>
             </motion.div>
           )}
@@ -483,4 +503,3 @@ const Catalogue = () => {
 };
 
 export default Catalogue;
-

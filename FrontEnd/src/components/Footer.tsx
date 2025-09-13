@@ -50,10 +50,10 @@ const Footer = () => {
   ];
 
   const socialLinks = [
-    { name: 'Facebook', icon: Facebook, href: '#' },
+    { name: 'Facebook', icon: Facebook, href: 'https://www.facebook.com/thierno.al.hassane.diallo.760327' },
     { name: 'Twitter', icon: Twitter, href: '#' },
     { name: 'Instagram', icon: Instagram, href: '#' },
-    { name: 'LinkedIn', icon: Linkedin, href: '#' }
+    { name: 'LinkedIn', icon: Linkedin, href: 'https://www.linkedin.com/in/thierno-alhassane-diallo-104515349/' }
   ];
 
   return (
@@ -179,7 +179,7 @@ const Footer = () => {
                 transition={{ duration: 0.6 }}
                 className="flex items-center space-x-2 text-gray-400 text-sm"
               >
-                <span>© 2024 BiblioTech. Tous droits réservés.</span>
+                <span> {new Date().getFullYear()} BiblioTech. Tous droits réservés.</span>
                 <span className="flex items-center">
                   Fait avec <Heart className="w-4 h-4 text-red-500 mx-1" /> en Guinée
                 </span>
@@ -196,6 +196,8 @@ const Footer = () => {
                   <motion.a
                     key={social.name}
                     href={social.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
                     whileHover={{ scale: 1.1, y: -2 }}
                     whileTap={{ scale: 0.95 }}
                     className="w-10 h-10 bg-gray-800 hover:bg-blue-600 rounded-lg flex items-center justify-center transition-all duration-200 group"

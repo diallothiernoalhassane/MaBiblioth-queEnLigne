@@ -36,6 +36,16 @@ const SearchBar = ({
     onSearch(localSearchQuery);
   };
 
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setLocalSearchQuery(value);
+    
+    // Si la recherche est vidée, déclencher automatiquement la recherche
+    if (value.trim() === '') {
+      onSearch('');
+    }
+  };
+
   return (
     <div className="w-full max-w-4xl mx-auto">
       <motion.form
@@ -51,7 +61,7 @@ const SearchBar = ({
             type="text"
             placeholder="Rechercher un livre..."
             value={localSearchQuery}
-            onChange={(e) => setLocalSearchQuery(e.target.value)}
+            onChange={handleInputChange}
             className="pl-10 sm:pl-12 pr-20 sm:pr-24 py-3 sm:py-4 text-base sm:text-lg border-2 border-gray-200 focus:border-blue-500 rounded-xl"
           />
           <Button
