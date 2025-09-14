@@ -3,6 +3,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from './ui/button';
+import NotificationBell from './NotificationBell';
 import { 
   BookOpen, 
   Search, 
@@ -69,7 +70,7 @@ const Navbar = () => {
           </motion.div>
 
           {/* Desktop Navigation */}
-          <div className="hidden lg:flex items-center space-x-6 xl:space-x-8">
+          <div className="hidden lg:flex items-center space-x-2 xl:space-x-3">
             {navItems.map((item) => {
               const Icon = item.icon;
               return (
@@ -80,7 +81,7 @@ const Navbar = () => {
                 >
                   <Link
                     to={item.path}
-                    className={`flex items-center space-x-2 px-3 py-2.5 xl:px-4 rounded-xl transition-all duration-300 relative overflow-hidden group ${
+                    className={`flex items-center space-x-1.5 px-2.5 py-2 xl:px-3 rounded-xl transition-all duration-300 relative overflow-hidden group ${
                       isActive(item.path)
                         ? 'text-white bg-gradient-to-r from-blue-600 to-purple-600 shadow-lg transform scale-105'
                         : 'text-gray-700 hover:text-white hover:bg-gradient-to-r hover:from-blue-500 hover:to-purple-500 hover:shadow-md hover:scale-105'
@@ -100,6 +101,9 @@ const Navbar = () => {
           <div className="hidden md:flex items-center space-x-2 lg:space-x-3 xl:space-x-4">
             {isAuthenticated ? (
               <div className="flex items-center space-x-2 lg:space-x-3">
+                {/* Notification Bell */}
+                <NotificationBell />
+                
                 <motion.div whileHover={{ scale: 1.05 }}>
                   <Link to="/profil">
                     <Button variant="outline" size="sm" className="flex items-center space-x-1 lg:space-x-2 px-2 lg:px-3">
