@@ -171,7 +171,7 @@ const AdminSidebar = ({ activeSection, onSectionChange, isMobileOpen, setIsMobil
         {!isCollapsed && (
           <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg p-4 mt-4">
             <h3 className="text-sm font-semibold text-gray-800 mb-1">
-              BiblioTech Admin
+              LibraTech Admin
             </h3>
             <p className="text-xs text-gray-600">
               Interface d'administration moderne

@@ -32,7 +32,7 @@ const AdminNavbar = () => {
             </div>
             <div className="text-white">
               <span className="text-xl font-bold">Admin Panel</span>
-              <div className="text-xs text-red-100">BiblioTech</div>
+              <div className="text-xs text-red-100">LibraTech</div>
             </div>
           </motion.div>
 

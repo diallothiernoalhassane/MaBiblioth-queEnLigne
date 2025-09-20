@@ -201,7 +201,7 @@ const Home = () => {
               transition={{ duration: 1.2, delay: 0.2 }}
               className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-black mb-6 sm:mb-8 bg-gradient-to-r from-white via-blue-100 to-purple-100 bg-clip-text text-transparent drop-shadow-2xl px-2"
             >
-              Bienvenue sur BiblioTech
+              Bienvenue sur LibraTech
             </motion.h1>
             <motion.p 
               initial={{ opacity: 0, y: 20 }}

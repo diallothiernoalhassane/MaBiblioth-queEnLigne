@@ -25,7 +25,7 @@ const About = () => {
               transition={{ duration: 1.2, delay: 0.2 }}
               className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-black mb-6 sm:mb-8 bg-gradient-to-r from-white via-purple-100 to-indigo-100 bg-clip-text text-transparent drop-shadow-2xl px-4"
             >
-              À Propos de BiblioTech
+              À Propos de LibraTech
             </motion.h1>
             <motion.p 
               initial={{ opacity: 0, y: 20 }}
@@ -52,7 +52,7 @@ const About = () => {
               Notre Mission
             </h2>
             <p className="text-base sm:text-lg lg:text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed px-4">
-              BiblioTech est née de la vision de démocratiser l'accès au savoir. 
+              LibraTech est née de la vision de démocratiser l'accès au savoir. 
               Nous croyons que la connaissance doit être accessible à tous, partout dans le monde. 
               Notre plateforme offre une collection diversifiée de livres numériques, 
               organisée par catégories pour faciliter la découverte et l'apprentissage.
@@ -143,7 +143,7 @@ const About = () => {
               Le Développeur
             </h2>
             <p className="text-base sm:text-lg lg:text-xl text-gray-600 max-w-3xl mx-auto px-4">
-              Découvrez l'esprit créatif derrière BiblioTech
+              Découvrez l'esprit créatif derrière LibraTech
             </p>
           </motion.div>
 
@@ -280,7 +280,7 @@ const About = () => {
               Notre Vision
             </h2>
             <p className="text-base sm:text-lg lg:text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed mb-6 sm:mb-8 px-4">
-              BiblioTech aspire à devenir la référence en matière de bibliothèque numérique en Afrique de l'Ouest, 
+              LibraTech aspire à devenir la référence en matière de bibliothèque numérique en Afrique de l'Ouest, 
               offrant un accès démocratique au savoir et contribuant à l'éducation et au développement culturel de la région.
             </p>
             

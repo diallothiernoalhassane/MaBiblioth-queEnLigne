@@ -82,7 +82,7 @@ const Footer = () => {
                     <BookOpen className="w-6 h-6 text-white" />
                   </div>
                   <span className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
-                    BiblioTech
+                    LibraTech
                   </span>
                 </Link>
                 <p className="text-gray-300 text-lg leading-relaxed max-w-md">
@@ -179,7 +179,7 @@ const Footer = () => {
                 transition={{ duration: 0.6 }}
                 className="flex items-center space-x-2 text-gray-400 text-sm"
               >
-                <span> {new Date().getFullYear()} BiblioTech. Tous droits réservés.</span>
+                <span> {new Date().getFullYear()} LibraTech. Tous droits réservés.</span>
                 <span className="flex items-center">
                   Fait avec <Heart className="w-4 h-4 text-red-500 mx-1" /> en Guinée
                 </span>

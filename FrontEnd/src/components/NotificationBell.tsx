@@ -22,13 +22,11 @@ const NotificationBell = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [hasNewNotifications, setHasNewNotifications] = useState(false);
 
-  console.log('🔍 État du composant:', { isAuthenticated, userId: user?._id, newBooks: newBooks.length, hasNewNotifications });
-
   useEffect(() => {
-    if (isAuthenticated) {
+    if (isAuthenticated && user?._id) {
       fetchNewBooks();
     }
-  }, [isAuthenticated]);
+  }, [isAuthenticated, user?._id]);
 
   const fetchNewBooks = async () => {
     try {
@@ -63,12 +61,8 @@ const NotificationBell = () => {
       const newBooksFiltered = sortedBooks.filter((book: any) => {
         const bookDate = new Date(book.dateAjout || book.createdAt);
         const thresholdDate = new Date(timeThreshold);
-        const isNew = bookDate > thresholdDate;
-        console.log(`� ${book.titre}: ${bookDate.toISOString()} > ${thresholdDate.toISOString()} = ${isNew}`);
-        return isNew;
+        return bookDate > thresholdDate;
       });
-      
-      console.log('🆕 Nouveaux livres filtrés pour utilisateur', userId, ':', newBooksFiltered.length);
       
       setNewBooks(newBooksFiltered.slice(0, 10));
       setHasNewNotifications(newBooksFiltered.length > 0);

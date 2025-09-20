@@ -64,7 +64,7 @@ const Navbar = () => {
                 <BookOpen className="w-6 h-6 text-white" />
               </motion.div>
               <span className="text-2xl font-bold bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent group-hover:from-pink-600 group-hover:to-blue-600 transition-all duration-500">
-                BiblioTech
+                LibraTech
               </span>
             </Link>
           </motion.div>
