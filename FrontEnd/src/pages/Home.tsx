@@ -49,8 +49,8 @@ const Home = () => {
   const fetchData = async () => {
     try {
       const [booksRes, categoriesRes] = await Promise.all([
-        axios.get('http://localhost:5000/api/livres?limit=1000'),
-        axios.get('http://localhost:5000/api/categories')
+        axios.get('https://mabiblioth-queenligne.onrender.com/api/livres?limit=1000'),
+        axios.get('https://mabiblioth-queenligne.onrender.com/api/categories')
       ]);
 
       console.log('Réponse livres:', booksRes.data);
@@ -91,7 +91,7 @@ const Home = () => {
     try {
       // Appeler l'API de téléchargement
       const response = await axios.get(
-        `http://localhost:5000/api/livres/${bookId}/telecharger`,
+        `https://mabiblioth-queenligne.onrender.com/api/livres/${bookId}/telecharger`,
         { 
           responseType: 'blob',
           headers: {

@@ -40,8 +40,8 @@ const Categories = () => {
   const fetchCategories = async () => {
     try {
       const [categoriesRes, booksRes] = await Promise.all([
-        axios.get('http://localhost:5000/api/categories'),
-        axios.get('http://localhost:5000/api/livres')
+        axios.get('https://mabiblioth-queenligne.onrender.com/api/categories'),
+        axios.get('https://mabiblioth-queenligne.onrender.com/api/livres')
       ]);
 
       // Gestion de la réponse des catégories
@@ -213,7 +213,7 @@ const Categories = () => {
                         <div className="flex-shrink-0 w-12 h-12 bg-gradient-to-br from-emerald-100 to-blue-100 rounded-xl flex items-center justify-center overflow-hidden shadow-md group-hover/book:shadow-lg transition-all duration-300">
                           {book.image || book.imageCouverture ? (
                             <img 
-                              src={`http://localhost:5000/${(book.image || book.imageCouverture)?.replace(/\\/g, '/')}`}
+                              src={`https://mabiblioth-queenligne.onrender.com/${(book.image || book.imageCouverture)?.replace(/\\/g, '/')}`}
                               alt={book.titre} 
                               className="w-full h-full object-cover group-hover/book:scale-110 transition-transform duration-300"
                               onError={(e) => {

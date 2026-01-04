@@ -50,7 +50,7 @@ const BookCard: React.FC<BookCardProps> = ({ book, onDownload, isAuthenticated =
   useEffect(() => {
     const fetchRatingStats = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/api/ratings/book/${book._id}/stats`);
+        const response = await axios.get(`https://mabiblioth-queenligne.onrender.com/api/ratings/book/${book._id}/stats`);
         setRatingStats(response.data);
       } catch (error) {
         console.error('Erreur lors du chargement des statistiques:', error);
@@ -68,7 +68,7 @@ const BookCard: React.FC<BookCardProps> = ({ book, onDownload, isAuthenticated =
       try {
         const token = localStorage.getItem('token');
         const response = await axios.get(
-          `http://localhost:5000/api/ratings/book/${book._id}/user`,
+          `https://mabiblioth-queenligne.onrender.com/api/ratings/book/${book._id}/user`,
           { headers: { Authorization: `Bearer ${token}` } }
         );
         setUserRating(response.data.rating || 0);
@@ -88,7 +88,7 @@ const BookCard: React.FC<BookCardProps> = ({ book, onDownload, isAuthenticated =
     try {
       const token = localStorage.getItem('token');
       await axios.post(
-        'http://localhost:5000/api/ratings',
+        'https://mabiblioth-queenligne.onrender.com/api/ratings',
         { livreId: book._id, rating: newRating },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -96,7 +96,7 @@ const BookCard: React.FC<BookCardProps> = ({ book, onDownload, isAuthenticated =
       setUserRating(newRating);
       
       // Recharger les statistiques
-      const response = await axios.get(`http://localhost:5000/api/ratings/book/${book._id}/stats`);
+      const response = await axios.get(`https://mabiblioth-queenligne.onrender.com/api/ratings/book/${book._id}/stats`);
       setRatingStats(response.data);
       
       // Afficher notification de remerciement
@@ -146,7 +146,7 @@ const BookCard: React.FC<BookCardProps> = ({ book, onDownload, isAuthenticated =
       <div className="relative overflow-hidden bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 h-52">
         {(book.imageCouverture || book.image) ? (
           <img
-            src={`http://localhost:5000/${(book.imageCouverture || book.image)?.replace(/\\/g, '/')}`}
+            src={`https://mabiblioth-queenligne.onrender.com/${(book.imageCouverture || book.image)?.replace(/\\/g, '/')}`}
             alt={book.titre}
             className="w-full h-full object-cover group-hover:scale-105 transition-all duration-700 filter group-hover:brightness-110"
           />

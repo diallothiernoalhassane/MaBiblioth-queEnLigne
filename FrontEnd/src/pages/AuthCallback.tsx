@@ -21,7 +21,7 @@ const AuthCallback = () => {
         }
 
         // Envoyer le code au backend pour échanger contre un token
-        const response = await fetch('http://localhost:5000/api/auth/google/callback', {
+        const response = await fetch('https://mabiblioth-queenligne.onrender.com/api/auth/google/callback', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

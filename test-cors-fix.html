@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test CORS - Frontend Local vs Backend Déployé</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .test { margin: 15px 0; padding: 15px; border: 1px solid #ddd; border-radius: 5px; }
+        .success { background: #d4edda; color: #155724; }
+        .error { background: #f8d7da; color: #721c24; }
+        .info { background: #d1ecf1; color: #0c5460; }
+        button { padding: 10px 20px; margin: 5px; background: #007bff; color: white; border: none; cursor: pointer; border-radius: 3px; }
+        pre { background: #f8f9fa; padding: 10px; border-radius: 3px; overflow-x: auto; }
+    </style>
+</head>
+<body>
+    <h1>🔧 Test CORS - Frontend Local ↔ Backend Déployé</h1>
+    
+    <div class="test info">
+        <h3>📍 Configuration actuelle</h3>
+        <p><strong>Frontend:</strong> Local (probablement http://localhost:5173)</p>
+        <p><strong>Backend:</strong> https://mabiblioth-queenligne.onrender.com</p>
+        <p><strong>URL de test:</strong> <span id="current-url"></span></p>
+    </div>
+    
+    <div class="test">
+        <h3>1️⃣ Test de connexion simple</h3>
+        <button onclick="testSimpleConnection()">Tester si le backend répond</button>
+        <div id="simple-result"></div>
+    </div>
+    
+    <div class="test">
+        <h3>2️⃣ Test CORS (requête simple)</h3>
+        <button onclick="testCORS()">Tester CORS avec GET /livres</button>
+        <div id="cors-result"></div>
+    </div>
+    
+    <div class="test">
+        <h3>3️⃣ Test POST (inscription)</h3>
+        <button onclick="testPOST()">Tester POST /users</button>
+        <div id="post-result"></div>
+    </div>
+    
+    <div class="test">
+        <h3>4️⃣ Test Login complet</h3>
+        <button onclick="testLogin()">Tester POST /login</button>
+        <div id="login-result"></div>
+    </div>
+
+    <script>
+        const API_BASE = 'https://mabiblioth-queenligne.onrender.com/api';
+        
+        // Afficher l'URL actuelle
+        document.getElementById('current-url').textContent = window.location.origin;
+        
+        async function testSimpleConnection() {
+            const resultDiv = document.getElementById('simple-result');
+            resultDiv.innerHTML = '⏳ Test en cours...';
+            
+            try {
+                const response = await fetch(API_BASE + '/livres?limit=1');
+                
+                resultDiv.innerHTML = `
+                    <div class="success">
+                        ✅ Connexion réussie !
+                        <br>Statut: ${response.status} ${response.statusText}
+                        <br>CORS: OK (pas d'erreur réseau)
+                    </div>
+                `;
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div class="error">
+                        ❌ Erreur de connexion: ${error.message}
+                        <br>Ceci est une erreur CORS ou réseau.
+                        <br>Solution: Déployez le backend avec la nouvelle configuration CORS.
+                    </div>
+                `;
+            }
+        }
+        
+        async function testCORS() {
+            const resultDiv = document.getElementById('cors-result');
+            resultDiv.innerHTML = '⏳ Test CORS en cours...';
+            
+            try {
+                const response = await fetch(API_BASE + '/livres?limit=3');
+                const data = await response.json();
+                
+                resultDiv.innerHTML = `
+                    <div class="success">
+                        ✅ CORS fonctionnel !
+                        <br>Statut: ${response.status}
+                        <br>Données reçues: ${Array.isArray(data) ? data.length + ' livres' : 'Format différent'}
+                        <pre>${JSON.stringify(data, null, 2).substring(0, 300)}...</pre>
+                    </div>
+                `;
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div class="error">
+                        ❌ Erreur CORS: ${error.message}
+                        <br>Le backend bloque les requêtes depuis votre origine.
+                    </div>
+                `;
+            }
+        }
+        
+        async function testPOST() {
+            const resultDiv = document.getElementById('post-result');
+            resultDiv.innerHTML = '⏳ Test POST en cours...';
+            
+            const testUser = {
+                nom: 'CORS Test ' + Date.now(),
+                email: 'test' + Date.now() + '@cors.com',
+                motDePasse: 'test123'
+            };
+            
+            try {
+                const response = await fetch(API_BASE + '/users', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(testUser)
+                });
+                
+                const data = await response.json();
+                
+                resultDiv.innerHTML = `
+                    <div class="${response.ok ? 'success' : 'error'}">
+                        ${response.ok ? '✅' : '❌'} POST ${response.ok ? 'réussi' : 'échoué'}
+                        <br>Statut: ${response.status}
+                        <pre>${JSON.stringify(data, null, 2)}</pre>
+                    </div>
+                `;
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div class="error">
+                        ❌ Erreur POST: ${error.message}
+                        <br>Problème CORS avec les requêtes POST.
+                    </div>
+                `;
+            }
+        }
+        
+        async function testLogin() {
+            const resultDiv = document.getElementById('login-result');
+            resultDiv.innerHTML = '⏳ Test login en cours...';
+            
+            try {
+                const response = await fetch(API_BASE + '/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        email: 'test@test.com',
+                        motDePasse: 'test123'
+                    })
+                });
+                
+                const data = await response.json();
+                
+                resultDiv.innerHTML = `
+                    <div class="${response.ok ? 'success' : 'error'}">
+                        ${response.ok ? '✅' : '❌'} Login ${response.ok ? 'réussi' : 'échoué'}
+                        <br>Statut: ${response.status}
+                        <pre>${JSON.stringify(data, null, 2)}</pre>
+                        ${response.ok && data.token ? `<p>🔑 Token reçu: ${data.token.substring(0, 50)}...</p>` : ''}
+                    </div>
+                `;
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div class="error">
+                        ❌ Erreur login: ${error.message}
+                        <br>C'est probablement l'erreur que vous rencontrez dans votre app.
+                    </div>
+                `;
+            }
+        }
+    </script>
+</body>
+</html>

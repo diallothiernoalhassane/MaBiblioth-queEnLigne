@@ -77,8 +77,8 @@ const Catalogue = () => {
   const fetchData = async () => {
     try {
       const [booksRes, categoriesRes] = await Promise.all([
-        axios.get('http://localhost:5000/api/livres?limit=1000'),
-        axios.get('http://localhost:5000/api/categories')
+        axios.get('https://mabiblioth-queenligne.onrender.com/api/livres?limit=1000'),
+        axios.get('https://mabiblioth-queenligne.onrender.com/api/categories')
       ]);
 
       const livres = booksRes.data.livres || [];
@@ -176,7 +176,7 @@ const Catalogue = () => {
 
     try {
       const response = await axios.get(
-        `http://localhost:5000/api/livres/${bookId}/telecharger`,
+        `https://mabiblioth-queenligne.onrender.com/api/livres/${bookId}/telecharger`,
         { 
           responseType: 'blob',
           headers: {
@@ -396,7 +396,7 @@ const Catalogue = () => {
                       <div className="w-16 h-24 sm:w-20 sm:h-28 bg-gray-200 rounded-lg overflow-hidden flex-shrink-0 mx-auto sm:mx-0">
                         {(book.imageCouverture || book.image) ? (
                           <img
-                            src={`http://localhost:5000/${(book.imageCouverture || book.image)?.replace(/\\/g, '/')}`}
+                            src={`https://mabiblioth-queenligne.onrender.com/${(book.imageCouverture || book.image)?.replace(/\\/g, '/')}`}
                             alt={book.titre}
                             className="w-full h-full object-cover"
                           />

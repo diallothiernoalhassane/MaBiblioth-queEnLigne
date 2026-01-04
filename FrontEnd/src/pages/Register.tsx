@@ -56,7 +56,7 @@ const Register = () => {
       setError('');
       
       // Envoyer le token Google au backend pour vérification et création/connexion du compte
-      const response = await fetch('http://localhost:5000/api/auth/google', {
+      const response = await fetch('https://mabiblioth-queenligne.onrender.com/api/auth/google', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

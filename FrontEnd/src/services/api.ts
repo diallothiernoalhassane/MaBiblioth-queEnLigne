@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 // Configuration de base d'axios
-const API_BASE_URL = 'http://localhost:5000/api';
+const API_BASE_URL = 'https://mabiblioth-queenligne.onrender.com/api';
 
 // Créer une instance axios avec configuration de base
 const api = axios.create({
@@ -28,9 +28,11 @@ api.interceptors.request.use(
 // Intercepteur pour gérer les erreurs de réponse
 api.interceptors.response.use(
   (response) => {
+    console.log('Réponse API reçue:', response.config.url, response.data);
     return response;
   },
   (error) => {
+    console.error('Erreur API:', error.config?.url, error.response?.data);
     if (error.response?.status === 401) {
       // Token expiré ou invalide, rediriger vers la page de connexion
       localStorage.removeItem('token');
@@ -65,8 +67,8 @@ interface AdminData {
 
 // Services d'authentification
 export const authService = {
-  login: (email: string, motDePasse: string) =>
-    api.post('/login', { email, motDePasse }),
+  login: (email: string, password: string) =>
+    api.post('/login', { email, motDePasse: password }),
   
   register: (userData: RegisterData) =>
     api.post('/users', userData),

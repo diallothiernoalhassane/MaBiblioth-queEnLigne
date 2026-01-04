@@ -41,7 +41,7 @@ const NotificationBell = () => {
       
       const lastReadTime = localStorage.getItem(`lastNotificationReadTime_${userId}`);
       
-      const response = await axios.get('http://localhost:5000/api/livres?limit=1000');
+      const response = await axios.get('https://mabiblioth-queenligne.onrender.com/api/livres?limit=1000');
       const allBooks = response.data.livres || [];
       
       console.log('📚 Tous les livres récupérés:', allBooks.length);

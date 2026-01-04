@@ -59,7 +59,7 @@ const UsersSection = () => {
         await userService.update(editingUser._id, formData);
       } else {
         // Pour la création, utiliser le service d'authentification
-        const response = await fetch('http://localhost:5000/api/users', {
+        const response = await fetch('https://mabiblioth-queenligne.onrender.com/api/users', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

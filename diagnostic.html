@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Diagnostic API Complet</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .test-section { margin: 20px 0; padding: 15px; border: 1px solid #ccc; }
+        button { padding: 10px 20px; margin: 5px; }
+        pre { background: #f5f5f5; padding: 10px; overflow-x: auto; }
+        .success { color: green; }
+        .error { color: red; }
+    </style>
+</head>
+<body>
+    <h1>Diagnostic API Backend</h1>
+    
+    <div class="test-section">
+        <h2>1. Test de disponibilité du serveur</h2>
+        <button onclick="testServerHealth()">Tester le serveur</button>
+        <div id="health-result"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>2. Test d'inscription</h2>
+        <button onclick="testRegister()">Tester l'inscription</button>
+        <div id="register-result"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>3. Test de connexion</h2>
+        <button onclick="testLogin()">Tester la connexion</button>
+        <div id="login-result"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>4. Test de la liste des livres</h2>
+        <button onclick="testBooks()">Tester les livres</button>
+        <div id="books-result"></div>
+    </div>
+
+    <script>
+        const API_BASE = 'https://mabiblioth-queenligne.onrender.com/api';
+        
+        async function testServerHealth() {
+            const resultDiv = document.getElementById('health-result');
+            try {
+                const response = await fetch(API_BASE + '/livres?limit=1');
+                resultDiv.innerHTML = `
+                    <div class="${response.ok ? 'success' : 'error'}">
+                        Statut: ${response.status} - ${response.ok ? 'OK' : 'Erreur'}
+                    </div>
+                `;
+            } catch (error) {
+                resultDiv.innerHTML = `<div class="error">Erreur: ${error.message}</div>`;
+            }
+        }
+        
+        async function testRegister() {
+            const resultDiv = document.getElementById('register-result');
+            const testUser = {
+                nom: 'Test User ' + Date.now(),
+                email: 'test' + Date.now() + '@test.com',
+                motDePasse: 'test123'
+            };
+            
+            try {
+                const response = await fetch(API_BASE + '/users', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(testUser)
+                });
+                
+                const data = await response.json();
+                resultDiv.innerHTML = `
+                    <div class="${response.ok ? 'success' : 'error'}">
+                        Statut: ${response.status}
+                        <pre>${JSON.stringify(data, null, 2)}</pre>
+                    </div>
+                `;
+                
+                // Si l'inscription réussit, tester la connexion avec ces identifiants
+                if (response.ok) {
+                    setTimeout(() => testLoginWithCredentials(testUser.email, testUser.motDePasse), 1000);
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `<div class="error">Erreur: ${error.message}</div>`;
+            }
+        }
+        
+        async function testLogin() {
+            await testLoginWithCredentials('test@test.com', 'test123');
+        }
+        
+        async function testLoginWithCredentials(email, password) {
+            const resultDiv = document.getElementById('login-result');
+            
+            try {
+                const response = await fetch(API_BASE + '/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, motDePasse: password })
+                });
+                
+                const data = await response.json();
+                resultDiv.innerHTML = `
+                    <div class="${response.ok ? 'success' : 'error'}">
+                        Statut: ${response.status}
+                        <pre>${JSON.stringify(data, null, 2)}</pre>
+                    </div>
+                `;
+            } catch (error) {
+                resultDiv.innerHTML = `<div class="error">Erreur: ${error.message}</div>`;
+            }
+        }
+        
+        async function testBooks() {
+            const resultDiv = document.getElementById('books-result');
+            
+            try {
+                const response = await fetch(API_BASE + '/livres?limit=5');
+                const data = await response.json();
+                
+                resultDiv.innerHTML = `
+                    <div class="${response.ok ? 'success' : 'error'}">
+                        Statut: ${response.status}
+                        <pre>${JSON.stringify(data, null, 2)}</pre>
+                    </div>
+                `;
+            } catch (error) {
+                resultDiv.innerHTML = `<div class="error">Erreur: ${error.message}</div>`;
+            }
+        }
+    </script>
+</body>
+</html>

@@ -27,7 +27,7 @@ const MyDownloadsBasic = () => {
       setError('');
       
       const token = localStorage.getItem('token');
-      const endpoint = 'http://localhost:5000/api/telechargements/my-downloads';
+      const endpoint = 'https://mabiblioth-queenligne.onrender.com/api/telechargements/my-downloads';
         
       console.log('Fetching downloads from:', endpoint);
       console.log('Token:', token ? 'Present' : 'Missing');

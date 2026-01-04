@@ -30,7 +30,7 @@ const Profile = () => {
 
   const fetchProfile = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/api/users/profile', {
+      const response = await axios.get('https://mabiblioth-queenligne.onrender.com/api/users/profile', {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`
         }
@@ -67,7 +67,7 @@ const Profile = () => {
     setSaving(true);
     try {
       const response = await axios.put(
-        'http://localhost:5000/api/users/profile',
+        'https://mabiblioth-queenligne.onrender.com/api/users/profile',
         editForm,
         {
           headers: {

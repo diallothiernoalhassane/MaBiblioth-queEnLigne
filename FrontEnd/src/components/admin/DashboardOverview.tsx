@@ -28,9 +28,9 @@ const DashboardOverview = () => {
       const headers = { Authorization: `Bearer ${token}` };
       
       const [livresRes, usersRes, downloadsRes] = await Promise.all([
-        axios.get('http://localhost:5000/api/livres?limit=1000', { headers }),
-        axios.get('http://localhost:5000/api/users', { headers }),
-        axios.get('http://localhost:5000/api/telechargements/all', { headers })
+        axios.get('https://mabiblioth-queenligne.onrender.com/api/livres?limit=1000', { headers }),
+        axios.get('https://mabiblioth-queenligne.onrender.com/api/users', { headers }),
+        axios.get('https://mabiblioth-queenligne.onrender.com/api/telechargements/all', { headers })
       ]);
 
       // Calculer l'activité récente (téléchargements des 7 derniers jours)

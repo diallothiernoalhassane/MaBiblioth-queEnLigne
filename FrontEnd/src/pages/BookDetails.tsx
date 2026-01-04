@@ -41,7 +41,7 @@ const BookDetails: React.FC = () => {
 
   const fetchBookDetails = async () => {
     try {
-      const response = await axios.get(`http://localhost:5000/api/livres/${id}`);
+      const response = await axios.get(`https://mabiblioth-queenligne.onrender.com/api/livres/${id}`);
       setBook(response.data);
     } catch (error) {
       console.error('Erreur lors du chargement du livre:', error);
@@ -60,7 +60,7 @@ const BookDetails: React.FC = () => {
     try {
       // Appeler l'API de téléchargement avec le token d'authentification
       const response = await axios.get(
-        `http://localhost:5000/api/livres/${id}/telecharger`,
+        `https://mabiblioth-queenligne.onrender.com/api/livres/${id}/telecharger`,
         { 
           responseType: 'blob',
           headers: {
@@ -109,7 +109,7 @@ const BookDetails: React.FC = () => {
     }
     
     // Ouvrir le PDF dans un nouvel onglet pour éviter les problèmes CSP
-    const pdfUrl = `http://localhost:5000/${pdfFile.replace(/\\/g, '/')}`;
+    const pdfUrl = `https://mabiblioth-queenligne.onrender.com/${pdfFile.replace(/\\/g, '/')}`;
     window.open(pdfUrl, '_blank');
   };
 
@@ -138,7 +138,7 @@ const BookDetails: React.FC = () => {
           <div className="overflow-hidden rounded-lg shadow-lg max-w-sm mx-auto h-96">
             {(book.imageCouverture || book.image) ? (
               <img
-                src={`http://localhost:5000/${(book.imageCouverture || book.image)?.replace(/\\/g, '/')}`}
+                src={`https://mabiblioth-queenligne.onrender.com/${(book.imageCouverture || book.image)?.replace(/\\/g, '/')}`}
                 alt={book.titre}
                 className="w-full h-full object-cover"
               />
