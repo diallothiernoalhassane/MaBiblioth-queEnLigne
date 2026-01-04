@@ -17,5 +17,6 @@ export default defineConfig({
     fs: {
       allow: ['..']
     }
-  }
+  },
+  base: './'  // ← AJOUTE cette ligne pour que les fichiers du build soient correctement trouvés sur Vercel
 })
