@@ -170,7 +170,7 @@ const Catalogue = () => {
 
   const handleDownload = async (bookId: string) => {
     if (!isAuthenticated) {
-      window.location.href = '/login';
+      window.location.href = 'https://mabiblioth-queenligne.onrender.com/login';
       return;
     }
 
