@@ -190,10 +190,9 @@ exports.livreDetails = async (req, res) => {
     }
 };
 
-// Télécharger un livre (Utilisateur connecté) avec support local et Cloudinary
+// Télécharger un livre (Utilisateur connecté) avec Cloudinary
 const Telechargement = require('../models/telechargement');
 const axios = require('axios');
-const path = require('path');
 
 exports.telechargerLivre = async (req, res) => {
     try {
@@ -216,37 +215,23 @@ exports.telechargerLivre = async (req, res) => {
             telechargementId: nouveauTelechargement._id
         });
 
-        // Vérifier si le fichier est sur Cloudinary ou en local
-        const isCloudinary = livre.fichierPdf.includes('cloudinary') || livre.fichierPdf.startsWith('http');
+        // Télécharger le PDF depuis Cloudinary et le servir à l'utilisateur
+        try {
+            const response = await axios.get(livre.fichierPdf, {
+                responseType: 'stream',
+                timeout: 30000 // 30 secondes timeout
+            });
 
-        if (isCloudinary) {
-            // Télécharger depuis Cloudinary
-            try {
-                const response = await axios.get(livre.fichierPdf, {
-                    responseType: 'stream',
-                    timeout: 30000 // 30 secondes timeout
-                });
+            // Définir les headers pour le téléchargement
+            res.setHeader('Content-Type', 'application/pdf');
+            res.setHeader('Content-Disposition', `attachment; filename="${livre.titre.replace(/[^a-zA-Z0-9]/g, '_')}.pdf"`);
 
-                // Définir les headers pour le téléchargement
-                res.setHeader('Content-Type', 'application/pdf');
-                res.setHeader('Content-Disposition', `attachment; filename="${livre.titre.replace(/[^a-zA-Z0-9]/g, '_')}.pdf"`);
+            // Envoyer le stream directement au client
+            response.data.pipe(res);
 
-                // Envoyer le stream directement au client
-                response.data.pipe(res);
-
-            } catch (downloadError) {
-                console.error('Erreur lors du téléchargement depuis Cloudinary:', downloadError);
-                res.status(500).json({ message: 'Erreur lors du téléchargement du fichier depuis Cloudinary' });
-            }
-        } else {
-            // Télécharger depuis le stockage local (fallback)
-            try {
-                const filePath = path.resolve(livre.fichierPdf);
-                res.download(filePath, `${livre.titre.replace(/[^a-zA-Z0-9]/g, '_')}.pdf`);
-            } catch (localError) {
-                console.error('Erreur lors du téléchargement local:', localError);
-                res.status(500).json({ message: 'Erreur lors du téléchargement du fichier local' });
-            }
+        } catch (downloadError) {
+            console.error('Erreur lors du téléchargement depuis Cloudinary:', downloadError);
+            res.status(500).json({ message: 'Erreur lors du téléchargement du fichier' });
         }
 
     } catch (err) {
