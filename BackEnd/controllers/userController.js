@@ -280,7 +280,7 @@ exports.googleCallback = async (req, res) => {
         const oauth2Client = new OAuth2Client(
             process.env.GOOGLE_CLIENT_ID,
             process.env.GOOGLE_CLIENT_SECRET,
-            'http://localhost:5173/auth/callback'
+            'https://ma-biblioth-que-en-ligne.vercel.app/auth/callback'
         );
 
         const { tokens } = await oauth2Client.getToken(code);

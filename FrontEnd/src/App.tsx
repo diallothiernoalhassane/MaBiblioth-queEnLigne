@@ -23,9 +23,12 @@ import AuthCallback from './pages/AuthCallback';
 import UserToAdminButton from './components/UserToAdminButton';
 
 function App() {
+  // Utiliser l'ID client Google depuis les variables d'environnement ou fallback
+  const googleClientId = import.meta.env.VITE_GOOGLE_CLIENT_ID || "532933002424-v36a8fe010srfmfpseno5m109ni5b9g7.apps.googleusercontent.com";
+  
   return (
     <GoogleOAuthProvider 
-      clientId="532933002424-v36a8fe010srfmfpseno5m109ni5b9g7.apps.googleusercontent.com"
+      clientId={googleClientId}
       onScriptLoadError={() => console.error('Erreur de chargement du script Google')}
       onScriptLoadSuccess={() => console.log('Script Google chargé avec succès')}
     >

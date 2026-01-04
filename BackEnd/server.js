@@ -34,7 +34,7 @@ app.use(helmet({
       scriptSrc: ["'self'", "'unsafe-inline'", "https://accounts.google.com", "https://apis.google.com"],
       styleSrc: ["'self'", "'unsafe-inline'"],
       connectSrc: ["'self'", "https://accounts.google.com", "https://www.googleapis.com", "https://mabiblioth-queenligne.onrender.com", "https://ma-biblioth-que-en-ligne.vercel.app"],
-      frameSrc: ["'self'", "https://accounts.google.com"],
+      frameSrc: ["'self'", "https://accounts.google.com", "https://ma-biblioth-que-en-ligne.vercel.app"],
     },
   },
 }));
