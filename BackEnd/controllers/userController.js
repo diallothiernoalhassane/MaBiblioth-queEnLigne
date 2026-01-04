@@ -1,5 +1,5 @@
 const User = require('../models/userModel');
-const bcrypt = require('bcryptjs');
+const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const { OAuth2Client } = require('google-auth-library');
 const { userSchema, loginSchema } = require('../validateurs/userValidateurs');
@@ -76,7 +76,8 @@ exports.connexion = async (req, res) => {
     const validPass = await bcrypt.compare(req.body.motDePasse, user.motDePasse);
     if (!validPass) return res.status(400).json({ message: 'Email ou mot de passe incorrect' });
 
-    const token = jwt.sign({ _id: user._id, role: user.role }, process.env.JWT_SECRET, { expiresIn: '1d' });
+    const jwtSecret = process.env.JWT_SECRET || 'votre_cle_secrete_par_defaut_pour_le_developpement_2024';
+    const token = jwt.sign({ _id: user._id, role: user.role }, jwtSecret, { expiresIn: '1d' });
     res.status(200).json({ message: 'Connexion réussie', token, user: { _id: user._id, nom: user.nom, email: user.email, role: user.role } });
 };
 
@@ -241,7 +242,7 @@ exports.googleAuth = async (req, res) => {
         // Générer le token JWT
         const token = jwt.sign(
             { _id: user._id, role: user.role }, 
-            process.env.JWT_SECRET, 
+            (process.env.JWT_SECRET || 'votre_cle_secrete_par_defaut_pour_le_developpement_2024'), 
             { expiresIn: '1d' }
         );
 
@@ -323,7 +324,7 @@ exports.googleCallback = async (req, res) => {
         // Générer le token JWT
         const token = jwt.sign(
             { _id: user._id, role: user.role }, 
-            process.env.JWT_SECRET, 
+            (process.env.JWT_SECRET || 'votre_cle_secrete_par_defaut_pour_le_developpement_2024'), 
             { expiresIn: '1d' }
         );
 

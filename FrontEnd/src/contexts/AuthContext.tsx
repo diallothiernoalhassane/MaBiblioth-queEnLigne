@@ -72,13 +72,11 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
       const { token, user: userData } = response.data;
       localStorage.setItem('token', token);
-      localStorage.setItem('user', JSON.stringify(userData));
       setUser(userData);
       setIsAuthenticated(true);
       
       return { success: true };
     } catch (error: unknown) {
-      console.error('Erreur de connexion détaillée:', error);
       const errorMessage = error instanceof Error && 'response' in error 
         ? (error as any).response?.data?.message || 'Erreur de connexion'
         : 'Erreur de connexion';

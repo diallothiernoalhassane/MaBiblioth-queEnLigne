@@ -28,11 +28,9 @@ api.interceptors.request.use(
 // Intercepteur pour gérer les erreurs de réponse
 api.interceptors.response.use(
   (response) => {
-    console.log('Réponse API reçue:', response.config.url, response.data);
     return response;
   },
   (error) => {
-    console.error('Erreur API:', error.config?.url, error.response?.data);
     if (error.response?.status === 401) {
       // Token expiré ou invalide, rediriger vers la page de connexion
       localStorage.removeItem('token');
@@ -67,8 +65,8 @@ interface AdminData {
 
 // Services d'authentification
 export const authService = {
-  login: (email: string, password: string) =>
-    api.post('/login', { email, motDePasse: password }),
+  login: (email: string, motDePasse: string) =>
+    api.post('/login', { email, motDePasse }),
   
   register: (userData: RegisterData) =>
     api.post('/users', userData),

@@ -27,17 +27,12 @@ const Login = () => {
     setLoading(true);
     setError('');
 
-    console.log('Tentative de connexion avec:', formData.email);
-
     try {
       const result = await login(formData.email, formData.password);
-      console.log('Résultat de la connexion:', result);
       
       if (result.success) {
         // Vérifier le token pour obtenir le rôle de l'utilisateur
         const token = localStorage.getItem('token');
-        console.log('Token reçu:', token ? 'Présent' : 'Manquant');
-        
         if (token) {
           try {
             const payload = JSON.parse(atob(token.split('.')[1]));
@@ -64,7 +59,6 @@ const Login = () => {
           navigate('/login');
         }
       } else {
-        console.error('Échec de connexion:', result.error);
         setError(result.error || 'Email ou mot de passe incorrect');
       }
     } catch (error) {

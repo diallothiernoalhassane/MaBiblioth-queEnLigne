@@ -30,26 +30,18 @@ app.use(helmet({
   contentSecurityPolicy: {
     directives: {
       defaultSrc: ["'self'"],
-      imgSrc: ["'self'", "data:", "http://localhost:5000", "http://localhost:5173", "https://mabiblioth-queenligne.onrender.com", "*"],
+      imgSrc: ["'self'", "data:", "https://mabiblioth-queenligne.onrender.com", "http://localhost:5173"],
       scriptSrc: ["'self'", "'unsafe-inline'", "https://accounts.google.com", "https://apis.google.com"],
       styleSrc: ["'self'", "'unsafe-inline'"],
-      connectSrc: ["'self'", "https://accounts.google.com", "https://www.googleapis.com", "https://mabiblioth-queenligne.onrender.com", "*"],
+      connectSrc: ["'self'", "https://accounts.google.com", "https://www.googleapis.com"],
       frameSrc: ["'self'", "https://accounts.google.com"],
     },
   },
 }));
 
 // Configuration CORS pour permettre les requêtes du frontend
-// Configuration pour le développement local avec backend déployé
 app.use(cors({
-  origin: [
-    'http://localhost:5173', 
-    'http://localhost:5174', 
-    'http://localhost:3000',
-    'http://localhost:8080',
-    'https://mabiblioth-queenligne.onrender.com',
-    'https://mabiblioth-queenligne.onrender.com/'
-  ],
+  origin: ['http://localhost:5173', 'http://localhost:5174', 'http://localhost:5000', 'http://localhost:4173', 'https://accounts.google.com'],
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
