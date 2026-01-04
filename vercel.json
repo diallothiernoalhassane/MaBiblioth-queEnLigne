@@ -7,6 +7,12 @@
     }
   ],
   "routes": [
-    { "src": "/(.*)", "dest": "/index.html" }
-  ]
+    { "src": "/api/(.*)", "dest": "https://mabiblioth-queenligne.onrender.com/api/$1" },
+    { "src": "/(.*)", "dest": "/FrontEnd/index.html" }
+  ],
+  "functions": {
+    "FrontEnd/**/*.html": {
+      "maxDuration": 10
+    }
+  }
 }
