@@ -17,6 +17,7 @@ const categoriesRoutes = require('./routes/categoriesRoutes');
 const telechargementsRoutes = require('./routes/telechargementsRoutes');
 const profileRoutes = require('./routes/profileRoutes');
 const ratingsRoutes = require('./routes/ratingsRoutes');
+const testRoutes = require('./routes/testRoutes');
 
 // connexion à MongoDB
 connectDB(); 
@@ -65,6 +66,7 @@ app.use('/api', categoriesRoutes);
 app.use('/api', telechargementsRoutes);
 app.use('/api', profileRoutes);
 app.use('/api/ratings', ratingsRoutes);
+app.use('/api/test', testRoutes);
 
 
 // Gestion des erreurs:

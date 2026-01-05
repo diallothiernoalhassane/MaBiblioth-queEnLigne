@@ -216,10 +216,21 @@ exports.telechargerLivre = async (req, res) => {
             telechargementId: nouveauTelechargement._id
         });
 
-        // Vérifier si le fichier est sur Cloudinary ou en local
-        const isCloudinary = livre.fichierPdf.includes('cloudinary') || livre.fichierPdf.startsWith('http');
+        // Vérifier si Cloudinary est configuré et si le fichier est sur Cloudinary
+        const isCloudinaryConfigured = process.env.CLOUDINARY_CLOUD_NAME && 
+                                     process.env.CLOUDINARY_API_KEY && 
+                                     process.env.CLOUDINARY_API_SECRET;
+        
+        const isCloudinaryFile = livre.fichierPdf.includes('cloudinary') || 
+                                livre.fichierPdf.startsWith('http');
 
-        if (isCloudinary) {
+        console.log('Configuration:', { 
+            isCloudinaryConfigured, 
+            isCloudinaryFile, 
+            filePath: livre.fichierPdf 
+        });
+
+        if (isCloudinaryConfigured && isCloudinaryFile) {
             // Télécharger depuis Cloudinary
             try {
                 const response = await axios.get(livre.fichierPdf, {
