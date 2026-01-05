@@ -1,7 +1,10 @@
 import axios from 'axios';
 
-// Configuration de base d'axios
-const API_BASE_URL = 'https://mabiblioth-queenligne.onrender.com/api';
+// Configuration de base d'axios avec URL dynamique
+const isDev = import.meta.env.DEV && window.location.hostname === 'localhost';
+const API_BASE_URL = isDev ? 'http://localhost:5000/api' : 'https://mabiblioth-queenligne.onrender.com/api';
+
+console.log('🔧 API_BASE_URL dans api.ts:', API_BASE_URL);
 
 // Créer une instance axios avec configuration de base
 const api = axios.create({

@@ -32,9 +32,12 @@ interface Category {
   nom: string;
 }
 
+import { useApiUrl } from '../hooks/useApiUrl';
+
 const Home = () => {
   const { isAuthenticated } = useAuth();
   const { showSuccess } = useNotification();
+  const { api } = useApiUrl();
   const [books, setBooks] = useState<Book[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   const [filteredBooks, setFilteredBooks] = useState<Book[]>([]);
@@ -49,8 +52,8 @@ const Home = () => {
   const fetchData = async () => {
     try {
       const [booksRes, categoriesRes] = await Promise.all([
-        axios.get('https://mabiblioth-queenligne.onrender.com/api/livres?limit=1000'),
-        axios.get('https://mabiblioth-queenligne.onrender.com/api/categories')
+        axios.get(api('/livres?limit=1000')),
+        axios.get(api('/categories'))
       ]);
 
       console.log('Réponse livres:', booksRes.data);
@@ -89,31 +92,40 @@ const Home = () => {
     }
 
     try {
-      // Appeler l'API de téléchargement
-      const response = await axios.get(
-        `https://mabiblioth-queenligne.onrender.com/api/livres/${bookId}/telecharger`,
-        { 
-          responseType: 'blob',
-          headers: {
-            'Authorization': `Bearer ${localStorage.getItem('token')}`
-          }
+      // Utiliser fetch pour obtenir le blob avec les headers corrects
+      const book = books.find(b => b._id === bookId);
+      const fileName = book ? `${book.titre.replace(/[^a-zA-Z0-9\s]/g, '_').trim()}.pdf` : 'livre.pdf';
+      
+      const blobResponse = await fetch(api(`/livres/${bookId}/telecharger`), {
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          'Accept': 'application/octet-stream'
         }
-      );
-
-      // Créer un lien de téléchargement
-      const url = window.URL.createObjectURL(new Blob([response.data]));
+      });
+      
+      if (!blobResponse.ok) {
+        throw new Error(`Erreur HTTP: ${blobResponse.status}`);
+      }
+      
+      const blob = await blobResponse.blob();
+      const url = window.URL.createObjectURL(blob);
+      
+      // Créer un lien invisible et cliquer dessus
       const link = document.createElement('a');
       link.href = url;
-      
-      // Trouver le livre pour récupérer le titre
-      const book = books.find(b => b._id === bookId);
-      const fileName = book ? `${book.titre}.pdf` : 'livre.pdf';
-      
-      link.setAttribute('download', fileName);
+      link.download = fileName;
+      link.style.display = 'none';
+      link.setAttribute('target', '_blank');
       document.body.appendChild(link);
+      
+      // Forcer le téléchargement
       link.click();
-      link.remove();
-      window.URL.revokeObjectURL(url);
+      
+      // Nettoyer
+      setTimeout(() => {
+        document.body.removeChild(link);
+        window.URL.revokeObjectURL(url);
+      }, 100);
 
       // Le téléchargement est déjà enregistré côté backend
       // Pas besoin de l'enregistrer à nouveau ici

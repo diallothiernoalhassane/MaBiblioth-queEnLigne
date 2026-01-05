@@ -30,8 +30,11 @@ interface Category {
   nom: string;
 }
 
+import { useApiUrl } from '../hooks/useApiUrl';
+
 const Catalogue = () => {
   const { isAuthenticated } = useAuth();
+  const { api, file, FRONTEND_URL } = useApiUrl();
   const [searchParams, setSearchParams] = useSearchParams();
   const [books, setBooks] = useState<Book[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
@@ -77,8 +80,8 @@ const Catalogue = () => {
   const fetchData = async () => {
     try {
       const [booksRes, categoriesRes] = await Promise.all([
-        axios.get('https://mabiblioth-queenligne.onrender.com/api/livres?limit=1000'),
-        axios.get('https://mabiblioth-queenligne.onrender.com/api/categories')
+        axios.get(api('/livres?limit=1000')),
+        axios.get(api('/categories'))
       ]);
 
       const livres = booksRes.data.livres || [];
@@ -170,13 +173,13 @@ const Catalogue = () => {
 
   const handleDownload = async (bookId: string) => {
     if (!isAuthenticated) {
-      window.location.href = 'https://mabiblioth-queenligne.onrender.com/login';
+      window.location.href = `${FRONTEND_URL}/login`;
       return;
     }
 
     try {
       const response = await axios.get(
-        `https://mabiblioth-queenligne.onrender.com/api/livres/${bookId}/telecharger`,
+        api(`/livres/${bookId}/telecharger`),
         { 
           responseType: 'blob',
           headers: {
@@ -185,18 +188,23 @@ const Catalogue = () => {
         }
       );
 
-      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const url = window.URL.createObjectURL(new Blob([response.data], { type: 'application/pdf' }));
       const link = document.createElement('a');
       link.href = url;
       
       const book = books.find(b => b._id === bookId);
-      const fileName = book ? `${book.titre}.pdf` : 'livre.pdf';
+      const fileName = book ? `${book.titre.replace(/[^a-zA-Z0-9\s]/g, '_').trim()}.pdf` : 'livre.pdf';
       
       link.setAttribute('download', fileName);
+      link.style.display = 'none';
       document.body.appendChild(link);
       link.click();
-      link.remove();
-      window.URL.revokeObjectURL(url);
+      
+      // Forcer le nettoyage après un court délai
+      setTimeout(() => {
+        link.remove();
+        window.URL.revokeObjectURL(url);
+      }, 100);
 
       // Le téléchargement est déjà enregistré côté backend
       // Pas besoin de l'enregistrer à nouveau ici
@@ -396,7 +404,7 @@ const Catalogue = () => {
                       <div className="w-16 h-24 sm:w-20 sm:h-28 bg-gray-200 rounded-lg overflow-hidden flex-shrink-0 mx-auto sm:mx-0">
                         {(book.imageCouverture || book.image) ? (
                           <img
-                            src={`https://mabiblioth-queenligne.onrender.com/${(book.imageCouverture || book.image)?.replace(/\\/g, '/')}`}
+                            src={file(book.imageCouverture || book.image || '')}
                             alt={book.titre}
                             className="w-full h-full object-cover"
                           />

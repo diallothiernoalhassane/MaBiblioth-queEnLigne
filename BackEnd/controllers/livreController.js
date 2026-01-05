@@ -228,8 +228,11 @@ exports.telechargerLivre = async (req, res) => {
                 });
 
                 // Définir les headers pour le téléchargement
-                res.setHeader('Content-Type', 'application/pdf');
-                res.setHeader('Content-Disposition', `attachment; filename="${livre.titre.replace(/[^a-zA-Z0-9]/g, '_')}.pdf"`);
+                res.setHeader('Content-Type', 'application/octet-stream');
+                res.setHeader('Content-Disposition', `attachment; filename="${livre.titre.replace(/[^a-zA-Z0-9\s]/g, '_').trim()}.pdf"`);
+                res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+                res.setHeader('Pragma', 'no-cache');
+                res.setHeader('Expires', '0');
 
                 // Envoyer le stream directement au client
                 response.data.pipe(res);
@@ -242,7 +245,15 @@ exports.telechargerLivre = async (req, res) => {
             // Télécharger depuis le stockage local (fallback)
             try {
                 const filePath = path.resolve(livre.fichierPdf);
-                res.download(filePath, `${livre.titre.replace(/[^a-zA-Z0-9]/g, '_')}.pdf`);
+                const fileName = `${livre.titre.replace(/[^a-zA-Z0-9\s]/g, '_').trim()}.pdf`;
+                res.download(filePath, fileName, (err) => {
+                    if (err) {
+                        console.error('Erreur lors du téléchargement local:', err);
+                        if (!res.headersSent) {
+                            res.status(500).json({ message: 'Erreur lors du téléchargement du fichier local' });
+                        }
+                    }
+                });
             } catch (localError) {
                 console.error('Erreur lors du téléchargement local:', localError);
                 res.status(500).json({ message: 'Erreur lors du téléchargement du fichier local' });

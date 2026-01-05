@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { Download, BookOpen } from 'lucide-react';
 import axios from 'axios';
+import { useApiUrl } from '../hooks/useApiUrl';
 
 interface Book {
   _id: string;
@@ -29,6 +30,7 @@ const BookDetails: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { isAuthenticated } = useAuth();
+  const { api } = useApiUrl();
   const [book, setBook] = useState<Book | null>(null);
   const [loading, setLoading] = useState(true);
   const [downloading, setDownloading] = useState(false);
@@ -58,26 +60,31 @@ const BookDetails: React.FC = () => {
 
     setDownloading(true);
     try {
-      // Appeler l'API de téléchargement avec le token d'authentification
-      const response = await axios.get(
-        `https://mabiblioth-queenligne.onrender.com/api/livres/${id}/telecharger`,
-        { 
-          responseType: 'blob',
-          headers: {
-            'Authorization': `Bearer ${localStorage.getItem('token')}`
-          }
+      // Utiliser fetch pour obtenir le blob avec les headers corrects
+      const blobResponse = await fetch(api(`/livres/${id}/telecharger`), {
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
         }
-      );
-
-      // Créer un lien de téléchargement
-      const url = window.URL.createObjectURL(new Blob([response.data]));
+      });
+      
+      const blob = await blobResponse.blob();
+      const url = window.URL.createObjectURL(blob);
+      
+      // Créer un lien invisible et cliquer dessus
       const link = document.createElement('a');
       link.href = url;
-      link.setAttribute('download', `${book?.titre}.pdf`);
+      link.download = `${book?.titre?.replace(/[^a-zA-Z0-9\s]/g, '_').trim() || 'livre'}.pdf`;
+      link.style.display = 'none';
       document.body.appendChild(link);
+      
+      // Forcer le téléchargement
       link.click();
-      link.remove();
-      window.URL.revokeObjectURL(url);
+      
+      // Nettoyer
+      setTimeout(() => {
+        document.body.removeChild(link);
+        window.URL.revokeObjectURL(url);
+      }, 100);
 
       // Le téléchargement est déjà enregistré côté backend
       // Pas besoin de l'enregistrer à nouveau ici
